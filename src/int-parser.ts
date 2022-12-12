@@ -1,4 +1,5 @@
 // Парсер целых чисел
+// tsc -p ./tsconfig.json --watch
 
 function parseMyInt(str: string): number {
 	if (!/^-?\d+/.test(str)) {

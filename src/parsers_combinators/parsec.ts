@@ -1,7 +1,4 @@
 // Парсерные комбинаторы
-
-
-// опциональный комбинатор
 import { take } from './lib/take'
 import type { ParserValue } from './lib/types'
 import { or } from './lib/or'
@@ -9,84 +6,12 @@ import { repeat } from './lib/repeat'
 import { tag } from './lib/tag'
 import { seq } from './lib/seq'
 import { opt } from './lib/opt'
+import { ws } from './space'
+import { number } from './number'
+import { string } from './string'
+import { boolean } from './boolean'
 
-// white space
-const
-	ws = take(/\s/, {min: 0});
-
-const sign = take(/[\-+]/, {
-	min: 0,
-	max: 1,
-	token: 'NUMBER_SIGN'
-});
-
-const exp = seq(
-	tag([/e/i]),
-	take(/[\-+]/, {token: 'EXP_SIGN', min: 0, max: 1}),
-	take(/\d/, {token: 'EXP_VALUE'})
-);
-
-const fractional = seq(
-	tag('.'),
-	take(/\d/, {token: 'FRACTIONAL_VALUE'})
-);
-
-const number = seq(
-	sign,
-
-	seq(
-		or(
-			seq(
-				tag('0', {token: 'INT_VALUE'}),
-				fractional
-			),
-
-			seq(
-				seq(
-					{
-						token: 'INT_VALUE',
-						tokenValue(value) {
-							return value.reduce((res, {value}) => res + value, '');
-						}
-					},
-
-					tag([/[1-9]/]),
-					take(/\d/, {min: 0}),
-				),
-
-				opt(fractional)
-			)
-		),
-
-		opt(exp)
-	)
-);
-
-const string = seq(
-	{
-		token: 'STRING_VALUE',
-		tokenValue(value) {
-			return value.reduce((res, {value}) => res + value, '');
-		}
-	},
-
-	tag('"'),
-	take(/[^"]/),
-	tag('"')
-);
-
-const boolean = or(
-	{
-		token: 'BOOLEAN_VALUE',
-		tokenValue({value}) {
-			return value;
-		}
-	},
-
-	tag('true'),
-	tag('false')
-);
-
+// поточный парсер JSON
 const json = (
 	source: Iterable<string>,
 	prev?: ParserValue | undefined
