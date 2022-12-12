@@ -1,3 +1,5 @@
+// Парсер инфиксных выражений
+
 function parseInfixExpr(str) {
 	str = str.replace(/\s/g, '');
 

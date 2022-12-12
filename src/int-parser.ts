@@ -1,3 +1,5 @@
+// Парсер целых чисел
+
 function parseMyInt(str: string): number {
 	if (!/^-?\d+/.test(str)) {
 		return NaN;
