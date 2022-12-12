@@ -1,20 +1,14 @@
 // Парсерные комбинаторы
 
-import type { Parser, ParserOptions, ParserValue } from './types'
-import { tag } from './tag'
-import { take } from './take'
-import { seq } from './seq'
-import { or } from './or'
-import { repeat } from './repeat'
-
 
 // опциональный комбинатор
-function opt<T = unknown, R = unknown>(
-	parser: Parser<T, R>,
-	opts?: ParserOptions<T[]>
-): Parser<T | T[], R[]> {
-	return repeat(parser, {min: 0, max: 1, ...opts})
-}
+import { take } from './lib/take'
+import type { ParserValue } from './lib/types'
+import { or } from './lib/or'
+import { repeat } from './lib/repeat'
+import { tag } from './lib/tag'
+import { seq } from './lib/seq'
+import { opt } from './lib/opt'
 
 // white space
 const
