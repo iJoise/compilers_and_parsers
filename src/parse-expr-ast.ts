@@ -101,7 +101,7 @@ export function parseExpr(str: string) {
 			children: [],
 		})
 	}
-	console.log(queue)
+
 	const
 		exprStack: Token[] = []
 
@@ -117,9 +117,49 @@ export function parseExpr(str: string) {
 					case ')': return NaN
 
 					default:
-						token.children!.unshift(exprStack.pop()!)
-						token.children!.unshift(exprStack.pop()!)
-						exprStack.push(token)
+						const right = exprStack.pop()!
+						const left = exprStack.pop()!
+
+						if (left.type === 'number' && right.type === 'number') {
+							switch (token.value) {
+								case '+':
+									exprStack.push({
+										type: 'number',
+										value: Number(left.value) + Number(right.value)
+									});
+									break;
+
+								case '-': {
+									exprStack.push({
+										type: 'number',
+										value: Number(left.value) - Number(right.value)
+									});
+									break;
+								}
+
+								case '*':
+									exprStack.push({
+										type: 'number',
+										value: Number(left.value) * Number(right.value)
+									});
+									break;
+
+								case '/': {
+									exprStack.push({
+										type: 'number',
+										value: Number(left.value) / Number(right.value)
+									});
+									break;
+								}
+
+								default:
+									throw new TypeError('Invalid operator')
+							}
+						} else {
+							token.children!.push(left)
+							token.children!.push(right)
+							exprStack.push(token)
+						}
 				}
 			}
 		}
@@ -128,5 +168,7 @@ export function parseExpr(str: string) {
 	return exprStack.pop()
 }
 
-const ast = parseExpr('10 + x * 15 / (4 - y)');
+// const ast = parseExpr('10 + x * 15 / (4 - y)');
+// const ast = parseExpr('10 + x * 15 / (4 - 2)');
+const ast = parseExpr('10 + 2 * 15 / (4 - 2)');
 console.dir(ast, { depth: null })
