@@ -5,7 +5,7 @@ interface Token {
 	children?: Token[]
 }
 
-export function parseExpr(str: string) {
+export function parseExpr(str: string, vars: Record<string, number> = {}) {
 	str = str.replace(/\s/g, '')
 
 	// if (/[^\d()+\-*/]/.test(str) || /(^|[^\d(])[+\-*/]($|[^\d)])/.test(str)) {
@@ -117,8 +117,22 @@ export function parseExpr(str: string) {
 					case ')': return NaN
 
 					default:
-						const right = exprStack.pop()!
-						const left = exprStack.pop()!
+						let right = exprStack.pop()!
+						let left = exprStack.pop()!
+
+						if (left.type === 'variable' && vars[String(left.value)] !== null) {
+							left = {
+								type: 'number',
+								value: vars[String(left.value)]
+							}
+						}
+
+						if (right.type === 'variable' && vars[String(right.value)] !== null) {
+							right = {
+								type: 'number',
+								value: vars[String(right.value)]
+							}
+						}
 
 						if (left.type === 'number' && right.type === 'number') {
 							switch (token.value) {
@@ -169,6 +183,6 @@ export function parseExpr(str: string) {
 }
 
 // const ast = parseExpr('10 + x * 15 / (4 - y)');
-// const ast = parseExpr('10 + x * 15 / (4 - 2)');
-const ast = parseExpr('10 + 2 * 15 / (4 - 2)');
+// const ast = parseExpr('10 + 2 * 15 / (4 - 2)');
+const ast = parseExpr('10 + x * 15 / (4 - 3)', { x: 2});
 console.dir(ast, { depth: null })
