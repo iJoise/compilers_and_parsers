@@ -27,7 +27,7 @@ const xmlTag = seq(
     ws,
     repeat(xmlAttr, {min: 0}),
     ws,
-    tag('>'),
+    tag('>', {token: 'END_CREATE_TAG'}),
 )
 
 const xmlEndTag = seq(
@@ -43,7 +43,7 @@ const xmlText = seq(
     take(/[^<>]/, {token: 'TEXT'}),
 )
 
-const xml = repeat(
+export const xml = repeat(
     seq(
         xmlTag,
         opt(
@@ -59,7 +59,7 @@ const xml = repeat(
 
 const p = xml(`
 <foo attr-1="value 1" attr-2="value 2">
-  <bar attr-1="value 1">Hello world</bar> dfg
+  <bar attr-1="value 1">Hello world</bar>
 </foo>
 `)
 console.log([...p])
