@@ -63,3 +63,21 @@ const p = xml(`
 </foo>
 `)
 console.log([...p])
+
+/*
+[
+  {type: 'CREATE_TAG', value: 'foo'},
+  {type: 'CREATE_ATTR_KEY', value: 'attr-1'},
+  {type: 'CREATE_ATTR_VALUE', value: 'value 1'},
+  {type: 'CREATE_ATTR_KEY', value: 'attr-2'},
+  {type: 'CREATE_ATTR_VALUE', value: 'value 2'}
+  {type: 'END_CREATE_TAG'},
+  {type: 'CREATE_TAG', value: 'bar'},
+  {type: 'CREATE_ATTR_KEY', value: 'attr-1'},
+  {type: 'CREATE_ATTR_VALUE', value: 'value 1'}
+  {type: 'END_CREATE_TAG'},
+  {type: 'TEXT', value: 'Hello world'},
+  {type: 'END_TAG', value: 'bar'},
+  {type: 'END_TAG', value: 'foo'}
+]
+*/

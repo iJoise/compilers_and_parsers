@@ -53,4 +53,5 @@ const html = minimizeHTML(`
 </p>
 `);
 
-console.log(html)
+console.log(html) // <p attr=foo att2=bar>Hello bar</p>
+
